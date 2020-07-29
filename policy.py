@@ -12,7 +12,7 @@ adminFullAcces =  Policy(
     subjects=[{'group':Eq('Admin')}],
     resources=[Any()],
     actions=[Any()],
-    description= "User with this policy can perform any action any resource with any method"
+    description= "Users with this policy can perform any actions on any resources with any methods"
 )
 ownerAccess =  Policy(
     2,
@@ -31,6 +31,9 @@ for policy in policies:
     storage.add(policy)
 
 def get_user(request):
+    """
+    Obtain the information of the requester
+    """
     action = request.method
     token = request.headers.get('Authorization')
     user = None
@@ -46,7 +49,7 @@ def get_user(request):
 
 def auth(request, resource):
     """
-    Compute user access
+    Authorize requester
     """
     user, action = get_user(request)
     guard = vakt.Guard(storage, vakt.RulesChecker())
